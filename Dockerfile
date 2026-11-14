@@ -30,6 +30,7 @@ COPY --from=source /source/frontend/package.json /source/frontend/pnpm-lock.yaml
 RUN pnpm install --frozen-lockfile
 COPY --from=source /source/frontend/ ./
 COPY --from=source /source/cases/ /app/cases/
+COPY --from=source /source/sarwatch/assets/presets.json /app/sarwatch/assets/presets.json
 RUN pnpm build
 
 FROM python:3.12-slim-bookworm AS runtime
