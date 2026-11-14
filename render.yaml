@@ -16,3 +16,7 @@ services:
         value: /app/frontend/dist
       - key: SARWATCH_CASES_DIR
         value: /app/cases
+      - key: SARWATCH_HEAVY_WORKERS
+        value: '1'
+      - key: SARWATCH_QUEUE_LIMIT
+        value: '8'

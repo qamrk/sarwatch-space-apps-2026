@@ -23,6 +23,10 @@ release
 tmp
 **/__pycache__
 **/.pytest_cache
+**/.mypy_cache
+**/.ruff_cache
+**/.coverage
+**/htmlcov
 **/*.egg-info
 **/.DS_Store
 **/node_modules
