@@ -36,7 +36,7 @@ Render передаёт порт через `PORT`; команда запуск�
 
 Бюджет чтения данных составляет **600 000 000 байт и 900 секунд на пару**. `SARWATCH_HEAVY_WORKERS=2` запускает два расчёта NISAR/Landsat параллельно. Два слота MODIS работают независимо. `SARWATCH_QUEUE_LIMIT` задаёт число ожидающих заданий в каждой очереди.
 
-NASA POWER доступен без ключа. Для объяснений Gemini создайте ключ в [Google AI Studio](https://aistudio.google.com/apikey), затем добавьте `GEMINI_API_KEY` в переменные окружения сервиса Render. По умолчанию используется `gemini-3.5-flash-lite`. Для OpenAI задайте `OPENAI_API_KEY`. Gemini получает спутниковые миниатюры и измерения, OpenAI получает измерения. Оба варианта используют погодные показатели NASA POWER.
+NASA POWER доступен без ключа. Для Gemini создайте ключ в [Google AI Studio](https://aistudio.google.com/apikey). В Render откройте **SARWatch → Environment → Add Environment Variable**. В поле **Key** укажите `GEMINI_API_KEY`, в поле **Value** вставьте ключ, затем выберите **Save and deploy**. В `/api/health` поле `ai_configured` показывает, доступен ли серверу ключ. В разделе погоды готового примера можно проверить, вернул ли провайдер объяснение. По умолчанию используется `gemini-3.5-flash-lite`. Gemini получает спутниковые миниатюры, измерения и погодные показатели NASA POWER. Для текстовых объяснений OpenAI поддерживается `OPENAI_API_KEY`.
 
 ## Локальная проверка контейнера
 
