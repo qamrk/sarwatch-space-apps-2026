@@ -17,6 +17,6 @@ services:
       - key: SARWATCH_CASES_DIR
         value: /app/cases
       - key: SARWATCH_HEAVY_WORKERS
-        value: '1'
+        value: '2'
       - key: SARWATCH_QUEUE_LIMIT
         value: '8'
