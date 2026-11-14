@@ -1,0 +1,36 @@
+# Credentials, account state and local execution data must never enter a build.
+.git
+**/.git
+.env
+.env.*
+**/.env
+**/.env.*
+.aws
+.codex
+.agents
+**/.npmrc
+**/.netrc
+**/*.pem
+**/*.key
+.venv
+**/.venv
+data
+work
+outputs
+output
+releases
+release
+tmp
+**/__pycache__
+**/.pytest_cache
+**/*.egg-info
+**/.DS_Store
+**/node_modules
+**/.pnpm-store
+frontend/dist
+frontend/public/cases
+# Raw satellite data are not needed by the deployed application.
+**/*.h5
+**/*.hdf5
+**/*.tif
+**/*.tiff

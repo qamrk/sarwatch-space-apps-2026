@@ -1,0 +1,18 @@
+# One free Docker web service serves both React and FastAPI. No paid resources.
+services:
+  - type: web
+    name: sarwatch
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    envVars:
+      - key: EARTHDATA_TOKEN
+        sync: false
+      - key: SARWATCH_DATA_DIR
+        value: /tmp/sarwatch/jobs
+      - key: SARWATCH_WEB_DIR
+        value: /app/frontend/dist
+      - key: SARWATCH_CASES_DIR
+        value: /app/cases
