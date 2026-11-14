@@ -38,6 +38,28 @@ Render передаёт порт через `PORT`; команда запуск�
 
 NASA POWER доступен без ключа. Для Gemini создайте ключ в [Google AI Studio](https://aistudio.google.com/apikey). В Render откройте **SARWatch → Environment → Add Environment Variable**. В поле **Key** укажите `GEMINI_API_KEY`, в поле **Value** вставьте ключ, затем выберите **Save and deploy**. В `/api/health` поле `ai_configured` показывает, доступен ли серверу ключ. В разделе погоды готового примера можно проверить, вернул ли провайдер объяснение. По умолчанию используется `gemini-3.5-flash-lite`. Gemini получает спутниковые миниатюры, измерения и погодные показатели NASA POWER. Для текстовых объяснений OpenAI поддерживается `OPENAI_API_KEY`.
 
+Если ключ хранится в Environment Group `gemini`, в настройках сервиса откройте **Environment → Linked Environment Groups → Link** и выберите `gemini`. Render запустит деплой. Переменная с тем же именем в настройках сервиса имеет приоритет над группой. [Документация Render](https://render.com/docs/configure-environment-variables#linking-a-group-to-a-service)
+
+## Render, Lovable и дополнительный исполнитель
+
+```mermaid
+flowchart LR
+    UI[Интерфейс Render / Lovable / Vercel] --> API[API на Render]
+    API --> Queue[Единая очередь SARWatch]
+    Queue --> Local[Два исполнителя Render]
+    Queue --> Docker[Дополнительный исполнитель Docker]
+    Local --> Results[Результаты на Render]
+    Docker --> Results
+    Results --> AI[Объяснение Gemini по снимкам и NASA POWER]
+    AI --> API
+```
+
+Для Lovable создайте `release/sarwatch-lovable.zip` командой `python scripts/build_lovable.py`. В Lovable выберите **Import project → Upload code**. В ZIP уже указан публичный API Render. Для Vercel используйте тот же клиент или соберите `frontend` с `VITE_API_URL=https://sarwatch-space-apps-2026.onrender.com`. Добавьте точные origin предпросмотра и опубликованного интерфейса в `CORS_ORIGINS` на Render через запятую. Интерфейс получает примеры, спутниковые снимки, погоду и отчёты через один API. [Импорт ZIP в Lovable](https://docs.lovable.dev/features/projects/import-project)
+
+Дополнительный исполнитель запускается в Docker из этого же образа командой `python -m sarwatch.worker`. На Render и исполнителе укажите один случайный `SARWATCH_WORKER_TOKEN` длиной не менее 32 символов. На исполнителе укажите `SARWATCH_WORKER_API=https://sarwatch-space-apps-2026.onrender.com` и `EARTHDATA_TOKEN`. `GEMINI_API_KEY` используется на Render для объяснения готовых результатов. Для размещения внешнего исполнителя подходит Vercel Daemons, где работающий контейнер расходует квоту памяти и в ожидании. [Vercel Daemons](https://vercel.com/docs/daemons)
+
+Свободный исполнитель забирает ожидающее задание. Если внешний исполнитель перестал подтверждать работу, Render через 120 секунд возвращает задание локальным исполнителям при следующем запросе статуса, здоровья или очереди. API и результаты остаются на Render. Очередь хранится в памяти одного сервиса и теряется при его перезапуске. `/api/health` показывает, включён ли внешний интерфейс исполнителя, а поле `executor` в статусе задания показывает, где оно выполняется.
+
 ## Локальная проверка контейнера
 
 Если Docker установлен, выполните из корня проекта:
