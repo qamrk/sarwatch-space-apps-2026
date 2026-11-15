@@ -1,103 +1,73 @@
-# Аудит кандидатов NISAR — 14 ноября 2026
+# NISAR candidate audit — November 14, 2026
 
-Проверены восемь предложенных мест: официальное подтверждение события, даты и зрелость доступных GCOV, совместимость пар и покрытие выбранной области по геометриям ASF. Это проверка метаданных и источников; она не заменяет чтение пикселей, независимую проверку классификации или измерение скорости на Render. Исторические события до запуска NISAR не используются.
+This audit checked eight proposed sites against official event sources and ASF catalog metadata. It reviewed acquisition dates, product maturity, compatible scene pairs, and full study-area coverage. Pixel quality and classification require separate checks.
 
-## Основные кандидаты
+## Primary candidates
 
-| Кандидат | Область | Решение и фактические даты |
+| Candidate | Area | Catalog findings |
 | --- | --- | --- |
-| Лимпопо / Инкомати, Мозамбик | 75 × 75 км | Оставить. Официальный сюжет NASA SVS 5661; обе исходные даты 05.01.2026 и 17.01.2026 есть в ASF. Оба BETA GCOV полностью покрывают квадрат. Наш результат должен быть помечен экспериментальным. |
-| Навахо, США | 50 × 50 км | Оставить при успешном чтении и различимом сигнале. Для совместимости заменить пару 20.09 → 07.11 на 20.09 → 14.10.2026 (PROVISIONAL); альтернатива — 26.10 → 07.11.2026 (VALIDATED). Подъём водохранилища подтверждён ведомствами, но не является готовой оценкой изменения площади нашего квадрата. |
-| Чаупхрая, Таиланд | 75 × 75 км | Оставить при успешном чтении и различимом сигнале. Снимка до 07.10.2025 в проверенном окне нет; использовать совместимую пару 20.07 → 30.09.2026. Наводнения сезона подтверждены; заявленные 2700 км² для нашего квадрата не подтверждены. |
+| Limpopo / Incomati, Mozambique | 75 × 75 km | The original Jan 5 and Jan 17, 2026 BETA scenes fully cover the study area. NASA SVS 5661 uses the same dates. Measurements from this pair are experimental. |
+| Navajo reservoir, United States | 50 × 50 km | Full PROVISIONAL pair from Sep 20 to Oct 14, 2026. An alternative VALIDATED pair spans Oct 26 to Nov 7, 2026. Agencies documented an increase in storage and surface elevation. |
+| Chao Phraya, Thailand | 75 × 75 km | Full compatible pair from Jul 20 to Sep 30, 2026. The checked window yielded no scene from before Oct 7, 2025. Government sources confirm seasonal flooding. The proposed 2,700 km² estimate remains unverified for this study area. |
 
-### Мозамбик — точная пара
+### Mozambique
 
-- Центр: −24.53, 32.98.
-- Bbox: `[32.61293346799221, -24.864821428571428, 33.34706653200779, -24.195178571428574]`.
-- До: `NISAR_L2_PR_GCOV_009_114_A_165_4005_DHDH_A_20260105T034232_20260105T034253_X05010_N_P_J_001`.
-- После: `NISAR_L2_PR_GCOV_010_114_A_165_4005_DHDH_A_20260117T034232_20260117T034254_X05010_N_P_J_001`.
-- Зрелость: `BETA`; CRID: `X05010`; track/frame: 114/165; режим 4005, DHDH.
-- [NASA SVS 5661](https://svs.gsfc.nasa.gov/5661/) действительно использует NISAR GCOV и эти даты. Показанный NASA регион и наш квадрат не обязаны совпадать. Площадь повреждённых сельхозземель из описания нельзя переносить в наш показатель затопления. Различение затопленного леса требует отдельного метода: классификация тёмной открытой воды этого не доказывает.
+- Center: −24.53, 32.98.
+- Bounds: `[32.61293346799221, -24.864821428571428, 33.34706653200779, -24.195178571428574]`.
+- Before: `NISAR_L2_PR_GCOV_009_114_A_165_4005_DHDH_A_20260105T034232_20260105T034253_X05010_N_P_J_001`.
+- After: `NISAR_L2_PR_GCOV_010_114_A_165_4005_DHDH_A_20260117T034232_20260117T034254_X05010_N_P_J_001`.
+- BETA, CRID `X05010`, track 114, frame 165, mode 4005, DHDH.
+- The visualized NASA region can differ from the study square. Detection of flooded forest requires a method designed for water under vegetation. [NASA SVS 5661](https://svs.gsfc.nasa.gov/5661/)
 
-### Навахо — точные пары
+### Navajo reservoir
 
-- Центр: 36.85, −107.55.
-- Bbox: `[-107.82813524604894, 36.62678571428572, -107.27186475395105, 37.073214285714286]`.
-- До PROVISIONAL: `NISAR_L2_PR_GCOV_031_027_D_070_4005_DHDH_A_20260920T015822_20260920T015857_P05023_F_F_J_001`.
-- После PROVISIONAL: `NISAR_L2_PR_GCOV_033_027_D_070_4005_DHDH_A_20261014T015823_20261014T015857_P05023_N_F_J_001`.
-- Альтернатива до VALIDATED: `NISAR_L2_PR_GCOV_034_027_D_070_4005_DHDH_A_20261026T015823_20261026T015858_P05036_N_F_J_001`.
-- Альтернатива после VALIDATED: `NISAR_L2_PR_GCOV_035_027_D_070_4005_DHDH_A_20261107T015823_20261107T015858_P05036_N_F_J_001`.
-- Все четыре сцены полностью покрывают квадрат, но пары между разными CRID здесь не используются.
-- [Официальный пакет заседания Colorado River Board, 12.11.2026](https://crb.ca.gov/wp-content/uploads/2026/11/20261112-board-packet.pdf) сообщает о восстановлении запаса воды примерно на 479 тысяч acre-feet и подъёме поверхности на 48 feet с начала октября. Это объём и высота, а не площадь. Дополнительный источник: [USBR, итоги октября 2026](https://www.usbr.gov/uc/water/rsvrs/ops/monthly_summaries/26_10_allRes.pdf).
+- Center: 36.85, −107.55.
+- Bounds: `[-107.82813524604894, 36.62678571428572, -107.27186475395105, 37.073214285714286]`.
+- PROVISIONAL before: `NISAR_L2_PR_GCOV_031_027_D_070_4005_DHDH_A_20260920T015822_20260920T015857_P05023_F_F_J_001`.
+- PROVISIONAL after: `NISAR_L2_PR_GCOV_033_027_D_070_4005_DHDH_A_20261014T015823_20261014T015857_P05023_N_F_J_001`.
+- VALIDATED before: `NISAR_L2_PR_GCOV_034_027_D_070_4005_DHDH_A_20261026T015823_20261026T015858_P05036_N_F_J_001`.
+- VALIDATED after: `NISAR_L2_PR_GCOV_035_027_D_070_4005_DHDH_A_20261107T015823_20261107T015858_P05036_N_F_J_001`.
+- Every scene covers the square. Each pair uses one CRID. The Colorado River Board reported roughly 479,000 acre-feet of additional storage and a 48-foot increase in surface elevation since early October. [Colorado River Board, November 12, 2026](https://crb.ca.gov/wp-content/uploads/2026/11/20261112-board-packet.pdf) · [USBR October summary](https://www.usbr.gov/uc/water/rsvrs/ops/monthly_summaries/26_10_allRes.pdf)
 
-### Таиланд — точная пара
+### Chao Phraya
 
-- Центр: 14.35, 100.55.
-- Bbox: `[100.20490566638468, 14.01517857142857, 100.89509433361532, 14.684821428571428]`.
-- До: `NISAR_L2_PR_GCOV_026_004_D_081_4005_DHDH_A_20260720T114713_20260720T114748_P05023_N_F_J_001`.
-- После: `NISAR_L2_PR_GCOV_032_004_D_081_4005_DHDH_A_20260930T114712_20260930T114746_P05023_N_F_J_001`.
-- Обе PROVISIONAL, `P05023`, track/frame 004/081, полное покрытие 75 км.
-- [Государственное предупреждение 29.09–04.10.2026](https://thailand.go.th/public/guide-book-detail/high-tide-warning-29-sept4-oct), [государственная сводка 05.10.2026](https://thailand.go.th/guide-book-detail/jicc-warns-of-further-rainfall-despite-improving-flood-conditions).
-- Влажность почвы и сельскохозяйственный цикл могут менять обратное рассеяние. Увеличение водного класса нельзя автоматически называть подтверждённым ущербом или площадью паводка.
+- Center: 14.35, 100.55.
+- Bounds: `[100.20490566638468, 14.01517857142857, 100.89509433361532, 14.684821428571428]`.
+- Before: `NISAR_L2_PR_GCOV_026_004_D_081_4005_DHDH_A_20260720T114713_20260720T114748_P05023_N_F_J_001`.
+- After: `NISAR_L2_PR_GCOV_032_004_D_081_4005_DHDH_A_20260930T114712_20260930T114746_P05023_N_F_J_001`.
+- Both observations are PROVISIONAL with CRID `P05023`, track 004, frame 081, and full coverage.
+- Soil moisture and crop cycles also affect radar backscatter. Flood extent and damage require independent confirmation. [Government warning, September 29 to October 4](https://thailand.go.th/public/guide-book-detail/high-tide-warning-29-sept4-oct) · [Government update, October 5](https://thailand.go.th/guide-book-detail/jicc-warns-of-further-rainfall-despite-improving-flood-conditions)
 
-## Остальные пять: ограничения и исправления
+## Other candidates
 
-| Кандидат | Результат проверки | Решение |
-| --- | --- | --- |
-| Расува, Непал | Наводнение 26.08.2026 подтверждено. Для 30 км есть совместимая полная пара 20.06 → 31.08.2026. Снимок 28.08 существует с другого трека и не совместим с выбранной июньской сценой. Подтверждения заявлению о прогнозировании катастрофы NISAR не найдено. | Возможен пример изменения интенсивности. Не публиковать прогноз, смещение склона или подтверждённую площадь оползня по GCOV. |
-| Жиронда / Бордо | Официально подтверждён пожар Saumos с 22.07.2026. Исходный центр 44.55, −0.85 расположен южнее основного документированного пожара. Центр 44.9, −1.0 с квадратом 50 км имеет совместимую полную пару 17.07 → 10.08.2026. | Возможен исправленный кандидат после чтения и проверки пикселей. Не выдавать интенсивность за площадь гари. |
-| Вашингтон | Sinlahekin начался 26.07.2026 и подтверждён властями. Его документированный центр около 48.70472, −119.69306 находится вне исходного квадрата. Исправленный квадрат 75 км имеет совместимую полную пару 25.07 → 18.08.2026. | Использовать конкретный Sinlahekin после проверки, а не обобщённые «мегапожары» по исходному центру. Площадь гари требует отдельной валидации. |
-| Апуи, Бразилия | Регион официально включён в приоритеты контроля вырубки. До 01.09.2025 в проверенном окне GCOV нет. Полные совместимые пары июня–сентября 2026 есть, но они не подтверждают конкретную вырубку в квадрате. | Оставить кандидатом мониторинга; не публиковать как доказанную вырубку или обещание обнаружения «на три месяца раньше оптики». |
-| Пойма Ганга | Подлинная статья IIRS от 03.08.2026 показывает яркое L-band рассеяние затопленного леса. Она не подтверждает именно указанные пользователем даты/площадь. Полная исходная пара отсутствует; для квадрата есть 22.10 → 03.11.2026 VALIDATED, что является другим сравнением. | Не выдавать наш алгоритм тёмной открытой воды за метод обнаружения воды под пологом. Нужен отдельный метод; исходную пару не публиковать. |
+- **Rasuwa, Nepal.** The Aug 26, 2026 flash flood is documented. A 30 km square has full compatible coverage on Jun 20 and Aug 31. The Aug 28 observation was acquired on a different track from the June scene. A radar intensity comparison can show changes. Forecasts and landslide extent require other evidence. [Nepal Ministry of Health update](https://nepal.gov.np/api/updates/475d9917-63ec-4e65-886a-d81c778d1bfb/attachments/1c0969fa-c16a-43fc-bd0f-c4f213f9d624)
+- **Gironde / Bordeaux, France.** Authorities confirmed the Saumos fire from Jul 22, 2026. Its documented extent is north of the original center at 44.55, −0.85. A 50 km square centered on 44.9, −1.0 has a compatible Jul 17 to Aug 10 pair. Burned area requires independent validation. [French Ministry of Agriculture](https://agriculture.gouv.fr/incendies-en-gironde-et-dans-les-landes-reconnaissance-dun-sinistre-de-grande-ampleur-pour-les) · [Gironde prefecture](https://www.gironde.gouv.fr/Actualites/Incendie-en-Gironde-toutes-les-informations-utiles)
+- **Washington, United States.** Authorities recorded the Sinlahekin fire from Jul 26, 2026 near 48.70472, −119.69306, outside the original square. A revised 75 km square has full compatible coverage on Jul 25 and Aug 18. [Washington State Patrol](https://wsp.wa.gov/state-fire-mobilization-authorized-for-the-sinlahekin-fire/) · [Washington DNR](https://dnr.wa.gov/news/2026/department-natural-resources-implements-full-closure-loomis-state-forest-due-fire-operations-hazards) · [InciWeb](https://inciweb.wildfire.gov/incident-information/wanes-sinlahekin-fire)
+- **Apuí, Brazil.** Apuí is on Brazil's deforestation monitoring priority list. The checked window yielded no GCOV before Sep 1, 2025. Compatible pairs from June through September 2026 are available. Event-level deforestation still requires supporting evidence. [Brazil's Ministry of the Environment](https://www.gov.br/mma/pt-br/assuntos/controle-ao-desmatamento-queimadas-e-ordenamento-ambiental-territorial/controle-do-desmatamento-1/municipios-prioritarios-da-amazonia)
+- **Ganges floodplain.** IIRS illustrates strong L-band backscatter from inundated forest. The original dates lacked a full pair. A distinct VALIDATED pair spans Oct 22 to Nov 3, 2026. SARWatch's dark open-water classification is designed for exposed water. [IIRS study](https://science.iirs.gov.in/seeing-through-forests-how-nisar-reveals-what-lies-beneath/), DOI `10.65456/iirs.2026.7.2.1`
 
-Источники по остальным кандидатам:
+## Maturity and acquisition gap
 
-- Непал: [официальная сводка Минздрава, 14.09.2026](https://nepal.gov.np/api/updates/475d9917-63ec-4e65-886a-d81c778d1bfb/attachments/1c0969fa-c16a-43fc-bd0f-c4f213f9d624).
-- Жиронда: [Министерство сельского хозяйства Франции](https://agriculture.gouv.fr/incendies-en-gironde-et-dans-les-landes-reconnaissance-dun-sinistre-de-grande-ampleur-pour-les), [префектура Жиронды](https://www.gironde.gouv.fr/Actualites/Incendie-en-Gironde-toutes-les-informations-utiles).
-- Вашингтон: [Washington State Patrol, 29.07.2026](https://wsp.wa.gov/state-fire-mobilization-authorized-for-the-sinlahekin-fire/), [Washington DNR](https://dnr.wa.gov/news/2026/department-natural-resources-implements-full-closure-loomis-state-forest-due-fire-operations-hazards), [InciWeb Sinlahekin](https://inciweb.wildfire.gov/incident-information/wanes-sinlahekin-fire).
-- Апуи: [Министерство окружающей среды Бразилии, список приоритетных муниципалитетов](https://www.gov.br/mma/pt-br/assuntos/controle-ao-desmatamento-queimadas-e-ordenamento-ambiental-territorial/controle-do-desmatamento-1/municipios-prioritarios-da-amazonia).
-- Ганг: [IIRS — Seeing Through Forests: How NISAR Reveals What Lies Beneath](https://science.iirs.gov.in/seeing-through-forests-how-nisar-reveals-what-lies-beneath/), DOI 10.65456/iirs.2026.7.2.1.
+BETA contains a limited early release. PROVISIONAL GCOV with CRID `P05023` includes observations starting Jun 17, 2026. The initial VALIDATED release with CRID `P05036` was published Nov 6, 2026 and covers acquisitions from Oct 21. Match maturity and CRID when comparing observations. ASF documents an instrument data gap from Jul 27, 2026 at 22:03:25 UTC to Aug 10, 2026 at 00:55:27 UTC. [Available data](https://nisar-docs.asf.alaska.edu/availability-overview/) · [Known issues](https://nisar-docs.asf.alaska.edu/nisar-known-issues/)
 
-## Зрелость данных и пробел в наблюдениях
+BETA data can show mask displacement, radiometric stripes, and radio-frequency interference. Browse previews can be offset by kilometers. Full footprint coverage is a catalog check. Pixel quality still requires validation.
 
-[ASF, доступные данные NISAR](https://hyp3-docs.asf.alaska.edu/nisar-docs/availability-overview/) документирует:
+## Preview and processing measurements
 
-- PROVISIONAL с CRID `P05023`: наблюдения с 17.06.2026; BETA содержит ограниченную раннюю подборку. Значение фильтра API — ровно `BETA`, не `BETA_V1`; `productionConfiguration=PR` подходит.
-- VALIDATED с `P05036`: наблюдения с 21.10.2026, выпуск 06.11.2026. Разные CRID/зрелость нельзя без проверки смешивать как единую сопоставимую пару.
-- Постоянный инструментальный пробел **27.07.2026 22:03:25 UTC — 10.08.2026 00:55:27 UTC**. Поэтому предложенные 01.08 для Ганга и 05.08 для Бордо не дают обычных наблюдений NISAR.
+Public PNG previews returned HTTP 200 and decoded successfully without Earthdata authentication under an 8 MB input cap. The following timings were measured locally.
 
-BETA не полностью калиброваны. [Официальные известные проблемы BETA](https://hyp3-docs.asf.alaska.edu/nisar-docs/product-known-issues/) включают смещение маски валидных данных, полосы яркости и радиопомехи. Быстрые browse могут иметь ошибку геолокации в километры. Полное покрытие геометрией каталога и применение имеющейся маски не устраняют эти ошибки. Показ такого материала должен сопровождаться зрелостью и ограничениями; это не эталон точности собственной классификации.
-
-## Облегчённые публичные ASF-превью: фактическая проверка
-
-Проверены GET-запросы **без Earthdata Token**, с потоковым пределом 8 МБ на изображение. Все перечисленные файлы дали HTTP 200; PNG декодировались. Время измерено из локальной среды, не на Render, и не является гарантией для посетителя.
-
-| Пара | Thumbnail до / после | Обычный browse до / после | Измеренное время одного GET |
+| Pair | Thumbnails before / after | Browse images before / after | GET time |
 | --- | --- | --- | --- |
-| Мозамбик 05/17.01 | 100 × 100; 9.4 / 9.7 КБ | 1948 × 1884; 3.10 / 3.14 МБ | thumbnail ≈2 с; browse 2.6–3.1 с |
-| Навахо 20.09/14.10 | 100 × 100; 13.2 / 12.9 КБ | 1972 × 1941; 4.02 / 3.95 МБ | thumbnail 1.6–2 с; browse 2.8–3.1 с |
-| Таиланд 20.07/30.09 | 100 × 100; 14.2 / 13.9 КБ | 1990 × 1963; 5.23 / 5.00 МБ | thumbnail ≈1.9 с; browse 2.8–3.1 с |
+| Mozambique | 100 × 100, 9.4 / 9.7 KB | 1948 × 1884, 3.10 / 3.14 MB | Thumbnail about 2 s, browse 2.6–3.1 s |
+| Navajo reservoir | 100 × 100, 13.2 / 12.9 KB | 1972 × 1941, 4.02 / 3.95 MB | Thumbnail 1.6–2 s, browse 2.8–3.1 s |
+| Thailand | 100 × 100, 14.2 / 13.9 KB | 1990 × 1963, 5.23 / 5.00 MB | Thumbnail about 1.9 s, browse 2.8–3.1 s |
 
-ASF не обещает здесь исходный размер 512 × 512: thumbnail фактически 100 × 100, обычные browse около 2000 пикселей. Их можно использовать для карточек и просмотра. Изменение цвета RGB не является измерением площади затопления; быстрое изображение не заменяет научный растр и его геопривязку.
+Scientific calculations used HTTP Range reads and averaged native blocks in linear power to a metric grid. Area estimates require comparable valid pixels and metric cell area. The selected square's nominal area is the side length squared.
 
-В научном расчёте широких областей необходимо явно указывать итоговый шаг/метод выборки. Площадь квадрата `side_km²` является номинальной площадью выбора, а площадь изменений должна учитывать фактическую площадь ячейки и валидное перекрытие двух дат. Уменьшенная сетка или редкая выборка дают обзорную оценку; нельзя заявлять детализацию исходных 20 м для результата с более крупным шагом.
+| Run on local Mac | Grid spacing | Wall time | Data read | Peak process RSS |
+| --- | ---: | ---: | ---: | ---: |
+| Mozambique 75 km | 120 m | 468.1 s | 565.7 MB | 294.6 MiB |
+| Navajo 50 km | 80 m | 195.4 s | 217.1 MB | 300.4 MiB |
+| Thailand 75 km | 120 m | 366.5 s | 527.4 MB | 294.4 MiB |
 
-## Воспроизводимые локальные результаты
-
-- `work/candidates-2026-audit.json`: сцены с официальными URL, геометрии, полное покрытие, пары, альтернативы, исправленные центры и источники. Каталог проверен через `asf_search`; совместимость: одинаковые maturity/track/direction/frame/mode/polarization/configuration/CRID.
-- `work/candidate-browse-probe.json`: точные URL, размеры, HTTP-результаты и время публичных PNG.
-- Эти рабочие JSON не содержат токенов и не должны автоматически становиться опубликованными «проверенными площадями».
-- Числа скорости и памяти полного расчёта следует дописать после завершения отдельных проб на Render. Этот аудит их не выдумывает.
-
-
-## Завершённые научные расчёты на локальном Mac
-
-Каждая пара реально прочитана ограниченными HTTP Range, нативные блоки усреднены в линейной мощности на метрическую сетку. Это не подсчёт RGB-пикселей ASF browse. Полные HDF5-гранулы не скачивались; исходные гранулы имеют размеры в гигабайтах.
-
-| Расчёт | Шаг анализа | Время | Прочитано | Пик RSS процесса |
-|---|---:|---:|---:|---:|
-| mozambique-75 | 120 м | 468.1 с | 565.7 МБ | 294.6 MiB |
-| navajo-50 | 80 м | 195.4 с | 217.1 МБ | 300.4 MiB |
-| thailand-75 | 120 м | 366.5 с | 527.4 МБ | 294.4 MiB |
-
-У всех трёх общий Otsu не прошёл проверку разделимости воды/суши. Поэтому опубликованы реальные до/после/разность сигнала, без численной площади затопления и без прогноза. События из официальных источников не являются независимой проверкой нашей классификации. Производительность Render проверяется отдельно; локальные цифры не гарантируют облачное время.
+Water and land failed the shared Otsu separation check for all three pairs. The resulting products display before and after observations and radar intensity differences. Render performance requires separate measurements. Local audit fixtures were recorded in `work/candidates-2026-audit.json` and `work/candidate-browse-probe.json`.

@@ -1,118 +1,81 @@
-# SARWatch 0.9.3
+# SARWatch 0.9.4
 
-Исследовательский прототип для NASA Space Apps 2026. Проект сравнивает радарные наблюдения NISAR и оптические снимки Landsat. Результаты доступны на карте и в PDF/PNG на русском и английском.
+SARWatch is a NASA Space Apps 2026 research prototype for comparing NISAR radar observations and Landsat optical imagery. It shows changes on an interactive map and exports PNG images and PDF reports in English, Russian, and Kazakh.
 
-**Онлайн:** https://sarwatch-space-apps-2026.onrender.com/
+[Open SARWatch](https://sarwatch-space-apps-2026.onrender.com/)
 
-## Открыть приложение
+## Run locally
 
-В уже установленном проекте на Mac откройте **`Start-SARWatch.command` двойным щелчком**. Он запускает Python-сервис и открывает браузер по адресу **http://127.0.0.1:8000/**. Окно запуска оставьте открытым. Повторный запуск использует уже работающий SARWatch и не завершает чужие процессы.
-
-`frontend/index.html` и `frontend/dist/index.html` предназначены для сервера: открывать их через `file://` не следует. `SARWatch.html` — стартовая страница со ссылкой на онлайн-приложение. Полная версия с новыми расчётами работает по HTTP.
-
-## Установка на другом компьютере
-
-Требуется Python 3.12. Публикуемый `sarwatch-source.zip` содержит полный код, проверенную сборку интерфейса, подготовленные примеры NISAR 2026 и тесты. Если в корне GitHub-репозитория находится архив, сначала распакуйте его в отдельную папку:
-
-В минимальной Linux-системе также нужна библиотека `libexpat1`; Docker устанавливает её автоматически и проверяет импорт научных модулей до публикации образа.
+The published `sarwatch-source.zip` contains the code, a built frontend, prepared cases, and tests. Extract it into a separate directory when working from the GitHub repository.
 
 ```sh
-python3 -m zipfile -e sarwatch-source.zip source
+python3.12 -m zipfile -e sarwatch-source.zip source
 cd source
-```
-
-Из распакованного проекта:
-
-```sh
-python3 -m venv .venv
+python3.12 -m venv .venv
 .venv/bin/python -m pip install -c requirements.lock.txt -e '.[web,test]'
-```
-
-Для подготовленных кейсов токен не нужен. Для новых расчётов создайте локальный `.env` из `config.env.example` и заполните `EARTHDATA_TOKEN` из [профиля Earthdata](https://urs.earthdata.nasa.gov/profile). Существующий `.env` сохраняйте. Токен не отправляйте в чат и не добавляйте в Git или переменные `VITE_*`.
-
-Запуск на Mac/Linux:
-
-```sh
 .venv/bin/python -m sarwatch.serve
 ```
 
-Либо `chmod +x Start-SARWatch.command` и двойной щелчок на Mac. Если порт 8000 занят другим приложением, задайте `SARWATCH_PORT=8001`. Для публикации на Render подготовлены Dockerfile и render.yaml: см. [DEPLOY.md](DEPLOY.md). Контейнер собирает frontend заново и обслуживает интерфейс и API с одного origin.
+Open [http://127.0.0.1:8000/](http://127.0.0.1:8000/). On macOS, you can double-click `Start-SARWatch.command` after setup. It reuses the local service if it is already running. Set `SARWATCH_PORT=8001` if another application uses port 8000. The frontend uses HTTP for API requests. `SARWatch.html` links to the hosted application.
 
-## Готовые примеры
+Prepared cases and catalog search are public. For a new NISAR calculation, copy `config.env.example` to a local `.env` and set `EARTHDATA_TOKEN` using your [Earthdata profile](https://urs.earthdata.nasa.gov/profile). Keep the token on the server and keep `.env` outside Git. Minimal Linux installations also need `libexpat1`. The Dockerfile includes it and verifies scientific Python imports.
 
-Для каждого примера доступны слои до, после и разности в dB, а также PNG и PDF на русском и английском. Пресеты содержат совместимые идентификаторы сцен NISAR с проверенным покрытием.
+The Dockerfile and Render Blueprint build the frontend and serve the interface and API from a single origin. See [deployment instructions](DEPLOY.md).
 
-| Пример | Даты NISAR, UTC | Участок |
+## Prepared cases
+
+| Case | Observation dates in UTC | Area |
 | --- | --- | --- |
-| Мозамбик | 05.01–17.01.2026 · BETA | 75 × 75 км в районе наводнения. Данные BETA могут содержать ошибки масок и калибровки. |
-| Северный Арал | 21.06–07.10.2026 · PROVISIONAL | 30 × 30 км на побережье у залива Сарышыганак. |
-| Озеро Урмия, Иран | 22.09.2014 и 07.09.2023 · Landsat 8 и 9 | 100 × 100 км. Цветные снимки и изменение водного класса на части озера и в окрестностях. |
-| Расува, Непал | 20.06–31.08.2026 · PROVISIONAL | 30 × 30 км в горных долинах, которые обследовали до и после паводка 26 августа. |
-| Sinlahekin, США | 20.07–06.09.2026 · PROVISIONAL | 30 × 30 км в районе пожара в штате Вашингтон. Использован канал HVHV. |
+| Mozambique flooding | Jan 5 and 17, 2026 · NISAR BETA | 75 × 75 km. Early data may exhibit masking and calibration artifacts. |
+| North Aral Sea | Jun 21 and Oct 7, 2026 · NISAR PROVISIONAL | 30 × 30 km near Saryshyganak Bay in Kazakhstan. |
+| Lake Urmia, Iran | Sep 22, 2014 and Sep 7, 2023 · Landsat 8 and 9 | 100 × 100 km across part of the lake and its surroundings. |
+| Rasuwa, Nepal | Jun 20 and Aug 31, 2026 · NISAR PROVISIONAL | 30 × 30 km of mountain valleys before and after the August 26 flash flood. |
+| Sinlahekin, United States | Jul 20 and Sep 6, 2026 · NISAR PROVISIONAL | 30 × 30 km of Washington State affected by wildfire. The radar channel is HVHV. |
 
-Радарные примеры показывают разность сигнала. Пример Урмии показывает оценку площади открытой воды по общим ясным пикселям.
+Radar cases show signal changes in decibels. The Urmia case estimates changes in open water using pixels clear on both observation dates. Case manifests document acquisition dates, scene IDs, and event sources.
 
-## Возможности и метод
+## Search and analysis
 
-- Выбор области до 100 км по стороне, включая быстрые размеры 10, 30, 50, 75 и 100 км.
-- Доступны Esri World Topographic Map и спутниковая подложка Esri с подписями городов и стран.
-- При первом открытии нового анализа SARWatch объясняет, зачем нужно местоположение. Запрос браузера появляется только после нажатия «Разрешить». Карту можно открыть на приблизительном регионе по коду страны от хостинга или часовому поясу браузера. Кнопки местоположения и перехода к выбранной области работают отдельно.
-- Новый анализ поддерживает от двух до шести дат. Для трёх и более дат сайт ищет ряд снимков из одного источника и сравнивает соседние наблюдения. Кнопки на карте открывают снимки в хронологическом порядке. Метрики и экспорт относятся к выбранному интервалу.
-- «Погода и причины изменений» показывает данные NASA POWER за 14 дней до каждой съёмки и сравнивает осадки с климатологией. С `GEMINI_API_KEY` Gemini анализирует уменьшенные спутниковые изображения первой и последней дат, метрики интервалов и погоду. Доступен также `OPENAI_API_KEY` для текстового объяснения по метрикам и погоде.
-- Автоматический режим использует NISAR для сравнений, у которых все запрошенные даты приходятся на 1 октября 2025 года или позже. Если совместимых радарных наблюдений нет, интерфейс предлагает отдельный поиск Landsat или MODIS. Для сравнений с более ранней датой авто сначала проверяет Landsat. NASA MODIS предоставляет обзорные снимки с 24 февраля 2000 года, в том числе над океаном.
-- Landsat Collection 2 Level-2 в каталоге Microsoft Planetary Computer доступен с 22 августа 1982 года. Поддерживаются Landsat 4, 5, 7, 8 и 9. Поиск для каждой эпохи начинается с 32 дней от выбранной даты и при необходимости расширяется до 96. Площади рассчитаны по общим ясным пикселям. Для других тем Landsat показывает цветные снимки.
-- В «Источниках и методе» доступны ссылки на сцены NASA Earthdata, исходные HDF5 и предпросмотры ASF, либо на каталог Landsat и NASA Worldview.
-- Оптический анализ исключает облака, тени, снег и пропуски по QA_PIXEL и использует флаг Water с проверкой отражения в коротковолновом ИК-канале. Площади относятся к ясным пикселям, общим для обеих дат. Классификация солончаков и мелководья требует проверки.
-- Научные HDF5 читаются ограниченными HTTP Range; полный ответ HTTP 200 отвергается. Нативные блоки около 512 × 512 усредняются в линейной мощности до сетки не более 640 отсчётов по стороне. Разрешение зависит от площади и указывается в результате.
-- Публичные ASF browse — отдельные обзорные изображения: вход до 8 МБ, выход не более 1024 × 1024; токен не используется, площади по RGB не считаются.
-- Фрагментное чтение HDF5, маска качества GCOV, общий канал и совместимость параметров обработки.
-- Совмещение в линейной мощности, сравнение в dB, слои до/после/разности и сопоставимая шкала.
-- Вода: медиана 3 × 3, общий Otsu, проверка разделения классов, удаление компонент меньше 9 пикселей. При недостаточном качестве вместо водной оценки остаётся сравнение сигнала.
-- Возможное затопление: только появившийся водный класс; исключены вода первой даты, историческая вода JRC Global Surface Water v1.5 (встречаемость от 90%) и буфер 60 м; уклон по Copernicus DEM GLO-30 не более 5°. Слой предварительный, не подтверждает событие. 
-- Интерфейс и экспорт PDF/PNG доступны на английском, русском и казахском.
+- Search for a place or enter latitude and longitude. Esri topographic and labeled satellite basemaps wrap horizontally. Select or resize a square up to 100 × 100 km. Browser geolocation is optional and starts after consent.
+- Choose two to six dates. SARWatch automatically searches NISAR when every date falls on or after October 1, 2025. Each compatible radar observation must cover the selected square and match the other observations in track, frame, direction, mode, polarization, configuration, and processing version.
+- If a compatible radar comparison is missing, SARWatch explains what the catalog found and offers an archive-wide search for other compatible NISAR dates at the same location. Select a proposed sequence to update the date fields. The optical alternatives can be searched separately.
+- For dates before the NISAR archive, SARWatch checks Landsat Collection 2 Level-2 first. The Landsat archive starts on August 22, 1982 and supports Landsat 4, 5, 7, 8, and 9. Searches start within 32 days of each requested date and can expand to 96 days. NASA MODIS overview imagery is available from February 24, 2000 where imagery exists.
+- Landsat uses QA_PIXEL to exclude clouds, cloud shadows, snow, and missing data. Water areas use comparable clear pixels, the Water flag, and shortwave infrared reflectance. The result displays a cloud warning when the selected Landsat pixels are obscured or when the NASA MODIS optical cloud-phase product detects clouds in the selected area.
+- Open the Sources panel for original Earthdata scenes, ASF previews and HDF5 links, the Landsat catalog, or NASA Worldview.
+- The weather panel compares NASA POWER observations in the 14 days before acquisition with local precipitation climatology. With `GEMINI_API_KEY`, the server requests an explanation using satellite previews, measurements, and weather. `OPENAI_API_KEY` supports a text explanation from metrics and weather.
 
-Сервис выполняет два задания NISAR или Landsat одновременно. Будущие задания ждут в очереди. Два слота MODIS работают независимо. Бюджет чтения NISAR и вспомогательных данных составляет до 600 МБ и 15 минут на пару наблюдений. Граница полярной области и антимеридиан не поддерживаются. На границах плиток вспомогательные данные могут быть недоступны, и в этом случае слой возможного затопления отсутствует.
+## Scientific method and limitations
 
-Маска качества не исключает все радиолокационные тени. Тёмная суша, влажная почва, ветер и смешанные пиксели могут давать ошибки. Copernicus DEM является моделью поверхности, а фильтры не заменяют гидрологическую модель и независимую проверку события.
+NISAR data are read with bounded HTTP Range requests. Native blocks are averaged in linear power to a grid of at most 640 samples per side. The displayed grid spacing depends on the study area. The pipeline checks GCOV quality masks and a common channel, aligns the observations, and compares the signal in decibels. Public ASF browse images are used for previews. They are limited to 8 MB of input and 1024 × 1024 pixels of output.
 
-Номинальная площадь квадрата равна `side_km²`. Для стороны 100 км это 10 000 км². Площадь вычисляется по числу сопоставимых валидных пикселей и площади ячейки сетки. При укрупнении сетки могут исчезнуть мелкие объекты.
+Experimental water classification uses a 3 × 3 median filter, a shared Otsu threshold, a class separation check, and removal of components under nine pixels. SARWatch shows the radar comparison when class separation is insufficient. Potential inundation uses the newly detected water class, excluding previously visible water, JRC historical water with frequency at or above 90%, and a 60 m buffer. It also limits results to slopes up to 5° from Copernicus DEM GLO-30.
 
-## API и сохранение
+Radar shadows, dark terrain, soil moisture, wind, and mixed pixels can affect classification. The DEM represents surface elevation. Interpreting changes requires independent evidence. Areas use comparable valid pixels and metric cell area. Coarser grids can miss small features. Analysis squares that cross the antimeridian or exceed supported latitudes are unsupported.
 
-FastAPI обслуживает интерфейс и API на одном адресе. Документация: `/docs`. Ключевые маршруты:
+Each NISAR or Landsat pair can read up to 600 MB in 15 minutes. Two heavy jobs and two MODIS jobs can run concurrently with bounded queues. For a series, each pair of consecutive observations has its own metrics and exports.
 
-- `GET /api/health`, `GET /api/cases`, `GET /api/presets`, `GET /api/scenes`
-- `POST /api/analyses`, `GET /api/analyses/{id}`
-- `GET /api/analyses/{id}/report.pdf?lang=ru`, `GET /api/analyses/{id}/map.png?lang=ru`
+## API and verification
 
-Готовые расчёты восстанавливаются после перезапуска, пока сохраняется каталог заданий; незавершённые автоматически не возобновляются. Хранятся не более 32 завершённых записей. На бесплатном Render временный диск может очищаться при перезапуске — интерфейс явно сообщает о недоступном задании. Подготовленные кейсы входят в образ и от сервиса расчёта не зависят.
+Open `/docs` for the FastAPI reference. Main endpoints include `/api/health`, `/api/cases`, `/api/presets`, `/api/places`, `/api/scenes`, `/api/series`, and `/api/nisar/dates`. Create an analysis with `POST /api/analyses`. Check status and access exports under `/api/analyses/{id}`.
 
-`SARWATCH_DATA_DIR`, `SARWATCH_CASES_DIR`, `SARWATCH_WEB_DIR` меняют каталоги. При раздельном размещении `CORS_ORIGINS` задаёт разрешённые origin через запятую, а frontend использует публичный `VITE_API_URL`. Секреты разрешены только серверу. Подписанные NASA CDN-ссылки остаются в памяти; Earthdata Bearer не передаётся CDN и вспомогательным источникам. HTTP 200 вместо точного Range 206 вызывает отказ от чтения, без полного скачивания.
-
-## Проверки и воспроизводимость
+Up to 32 completed jobs can be restored while their output directory persists. Render Free deployments use temporary storage. Prepared cases are part of the image. With a separate frontend, set the exact frontend origins in `CORS_ORIGINS` and set `VITE_API_URL` at build time.
 
 ```sh
 .venv/bin/python -m pytest -q
-```
-
-Для изменений интерфейса нужны Node 24 и pnpm 11.25:
-
-```sh
 cd frontend
 pnpm install --frozen-lockfile
 pnpm build
 ```
 
-Проверены сетевые бюджеты, отсутствие передачи токена CDN/вспомогательным источникам, маски качества/NoData, проекции, метрическая площадь, совместимость и совмещение сцен, отказ классификации, вспомогательные фильтры, PDF, API, отдача файлов, запуск и восстановление заданий. Тестовые искусственные массивы не выдаются за реальные наблюдения. Внешние сервисы могут отказывать; это обрабатывается понятным состоянием ошибки, а не подставными данными.
+The frontend uses Node 24 and pnpm 11.25. Backend tests cover bounded transfers, credentials, masks and projections, scene matching, area measurements, classification, exports, and the job lifecycle. `scripts/probe_balkhash.py` checks access to the data service.
 
-Технические проверки доступа выполняются скриптом `scripts/probe_balkhash.py`. Генераторы удалённых примеров исключены из активной версии. Новые кейсы будут подготовлены по отдельно указанным местам и датам.
+## Data sources and attribution
 
-## Источники и атрибуция
+- [ASF NISAR GCOV](https://nisar-docs.asf.alaska.edu/gcov/) and [NISAR Cookbook](https://asfopensarlab.github.io/NISAR_Cookbook/search-stream-nisar-asf-search/)
+- [USGS Landsat QA bands](https://www.usgs.gov/landsat-missions/landsat-collection-2-quality-assessment-bands)
+- [NASA GIBS](https://nasa-gibs.github.io/gibs-api-docs/) and [NASA POWER](https://power.larc.nasa.gov/)
+- [JRC Global Surface Water](https://global-surface-water.appspot.com/download), EC JRC/Google and Pekel et al. (2016), DOI `10.1038/nature20584`
+- [Copernicus DEM GLO-30](https://registry.opendata.aws/copernicus-dem/), ESA / Copernicus / Sinergise
+- [Sentinel-2 through Earth Search](https://earth-search.aws.element84.com/v1)
 
-- [ASF: NISAR GCOV](https://nisar-docs.asf.alaska.edu/gcov/), [NISAR Cookbook](https://asfopensarlab.github.io/NISAR_Cookbook/search-stream-nisar-asf-search/)
-- [Sentinel-2 через Earth Search](https://earth-search.aws.element84.com/v1)
-- [JRC Global Surface Water](https://global-surface-water.appspot.com/download): Source EC JRC/Google; Pekel et al., Nature 540, 418–422 (2016), doi:10.1038/nature20584
-- [Copernicus DEM GLO-30](https://registry.opendata.aws/copernicus-dem/): ESA / Copernicus / Sinergise
-- [NASA GIBS векторы](https://nasa-gibs.github.io/gibs-api-docs/access-advanced-topics/#vector-visualizations)
-
-NASA/JPL/ASF NISAR. Лицензия SIL OFL включена рядом со шрифтом Noto Sans. Подложка интерактивной карты — Esri World Topographic Map с атрибуцией поставщиков на карте. Esri планирует отключить этот растровый сервис в декабре 2029 года. [График Esri](https://www.esri.com/arcgis-blog/products/arcgis-living-atlas/announcements/sunsetting-legacy-basemaps/)
+The map displays attribution for its Esri basemaps. The Noto Sans font is distributed with its SIL Open Font License.
