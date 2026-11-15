@@ -1,4 +1,4 @@
-# SARWatch 0.10.0
+# SARWatch 0.10.1
 
 SARWatch is a NASA Space Apps 2026 research prototype for comparing NISAR radar observations and Landsat optical imagery. It shows changes on an interactive map and exports PNG images and PDF reports in English, Russian, and Kazakh.
 
@@ -56,7 +56,7 @@ Each NISAR or Landsat pair can read up to 600 MB in 15 minutes. Two heavy jobs a
 
 ## Experimental risk assessment
 
-The **Прогнозирование** tab uses the existing map and supports study areas up to 100 × 100 km. Select a risk category and a period, then select any colored sector to inspect the factors. Forecasts run separately from satellite comparison jobs.
+The **Прогнозирование** panel sits below weather in **New analysis** and uses the selected category and study area up to 100 × 100 km. Choose a preset horizon or enter an end date, then select a colored sector to inspect its factors. A custom date includes the full selected day in UTC. Forecasts run separately from satellite comparison jobs.
 
 | Category | Horizon | Main factors |
 | --- | --- | --- |
@@ -69,7 +69,7 @@ The risk indices are experimental screening rules. They have no independent accu
 
 ## API and verification
 
-Open `/docs` for the FastAPI reference. Main endpoints include `/api/health`, `/api/cases`, `/api/presets`, `/api/places`, `/api/scenes`, `/api/series`, and `/api/nisar/dates`. Create an analysis with `POST /api/analyses`. Check status and access exports under `/api/analyses/{id}`. Read a risk assessment with `GET /api/predictions?bbox=west,south,east,north&category=water&days=1`.
+Open `/docs` for the FastAPI reference. Main endpoints include `/api/health`, `/api/cases`, `/api/presets`, `/api/places`, `/api/scenes`, `/api/series`, and `/api/nisar/dates`. Create an analysis with `POST /api/analyses`. Check status and access exports under `/api/analyses/{id}`. Read a risk assessment with `GET /api/predictions?bbox=west,south,east,north&category=water&days=1` or use `until=YYYY-MM-DD` as the horizon parameter.
 
 Up to 32 completed jobs can be restored while their output directory persists. Render Free deployments use temporary storage. Prepared cases are part of the image. With a separate frontend, set the exact frontend origins in `CORS_ORIGINS` and set `VITE_API_URL` at build time.
 
