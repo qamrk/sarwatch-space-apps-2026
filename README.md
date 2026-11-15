@@ -1,4 +1,4 @@
-# SARWatch 0.9.4
+# SARWatch 0.10.0
 
 SARWatch is a NASA Space Apps 2026 research prototype for comparing NISAR radar observations and Landsat optical imagery. It shows changes on an interactive map and exports PNG images and PDF reports in English, Russian, and Kazakh.
 
@@ -54,9 +54,22 @@ Radar shadows, dark terrain, soil moisture, wind, and mixed pixels can affect cl
 
 Each NISAR or Landsat pair can read up to 600 MB in 15 minutes. Two heavy jobs and two MODIS jobs can run concurrently with bounded queues. For a series, each pair of consecutive observations has its own metrics and exports.
 
+## Experimental risk assessment
+
+The **Прогнозирование** tab uses the existing map and supports study areas up to 100 × 100 km. Select a risk category and a period, then select any colored sector to inspect the factors. Forecasts run separately from satellite comparison jobs.
+
+| Category | Horizon | Main factors |
+| --- | --- | --- |
+| Flooding | 24 hours, 3 days, 7 days | NOAA GFS heavy rain, recent precipitation from NASA GPM IMERG where available, terrain, and water history from JRC Landsat. |
+| Wildfire | 24 hours, 3 days, 7 days | Dry heat, wind, preceding rainfall, wooded or shrubby cover, slope, and recent thermal detections from NASA GIBS VIIRS when available. |
+| Agricultural fire | 24 hours, 3 days, 7 days | Dry air and strong gusts in the same hour, preceding 48-hour rainfall, cropland mapped by ESA WorldCover, and positive VIIRS detections. |
+| Tree-cover loss | 90 days, 1 year | Recent loss density and distance to earlier loss from Landsat, proximity to farmland or built land, and slope. |
+
+The risk indices are experimental screening rules. They have no independent accuracy estimate and do not express event probabilities. Weather has a coarser resolution than the mapped sectors. A missing source or unsupported land-cover class is indicated separately. Tree-cover loss can be due to harvesting, fire, or other disturbances. The flood screen uses rainfall and terrain and does not model river discharge or infrastructure.
+
 ## API and verification
 
-Open `/docs` for the FastAPI reference. Main endpoints include `/api/health`, `/api/cases`, `/api/presets`, `/api/places`, `/api/scenes`, `/api/series`, and `/api/nisar/dates`. Create an analysis with `POST /api/analyses`. Check status and access exports under `/api/analyses/{id}`.
+Open `/docs` for the FastAPI reference. Main endpoints include `/api/health`, `/api/cases`, `/api/presets`, `/api/places`, `/api/scenes`, `/api/series`, and `/api/nisar/dates`. Create an analysis with `POST /api/analyses`. Check status and access exports under `/api/analyses/{id}`. Read a risk assessment with `GET /api/predictions?bbox=west,south,east,north&category=water&days=1`.
 
 Up to 32 completed jobs can be restored while their output directory persists. Render Free deployments use temporary storage. Prepared cases are part of the image. With a separate frontend, set the exact frontend origins in `CORS_ORIGINS` and set `VITE_API_URL` at build time.
 
